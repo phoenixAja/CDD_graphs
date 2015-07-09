@@ -30,17 +30,18 @@ mass <- as.vector(as.numeric(as.character(df_count[,4])))
 
 unique_plates <- unique(df_count$Plate.Name)
 
-for (i in seq_along(unique_plates)) {
+for (i in seq_along(unique_plates)){
+  jpeg(paste0(unique_plates[i], ".jpg"))
 	unique_selections_1 <- which(df_count$Plate.Name == unique_plates[i])
 	perc_inhibition_1 <- df_count[unique_selections_1,]
 	unique_volumes_1 <- which(perc_inhibition_1$PA.Dose.Response.Data..Volume..nL. == 500)	
 	df_1 <- perc_inhibition_1[unique_volumes_1,]
-	par(mfrow=c(2,2), mar=c(2.0, 4.0,2.0,4.0))
+	par(mfrow=c(2,2), mar=c(2.0, 4.0,2.0,4.0), oma=c(0,0,3,1))
 	plot(df_1$inv_pos_control, ylab= "% inhibition", xlab= "", main= "500 nL Sample", type = "l", col = "purple")
     par(new=TRUE)
     plot(df_1$Mass..mg., type="l", col= "red", xlab= NA, ylab=NA, axes=F)
     axis(side=4, col.ticks="red", col.axis="red", las=0)
-    mtext("Mass (mg)", las=0, side=4,line=3, col="red")
+    mtext("Mass (mg)", las=0, side=4,line=3, col="red", cex=0.8)
     	
     #250 mL sample
     unique_volumes_2 <- which(perc_inhibition_1$PA.Dose.Response.Data..Volume..nL. == 250)	
@@ -50,7 +51,7 @@ for (i in seq_along(unique_plates)) {
     par(new=TRUE)
     plot(df_2$Mass..mg., type="l", col= "red", xlab= NA, ylab=NA, axes=F)
     axis(side=4, col.ticks="red", col.axis="red", las=0)
-    mtext("Mass (mg)", las=0, side=4,line=3, col="red")	
+    mtext("Mass (mg)", las=0, side=4,line=3, col="red", cex=0.8)	
     
     #100 mL sample
     unique_volumes_3 <- which(perc_inhibition_1$PA.Dose.Response.Data..Volume..nL. == 100)	
@@ -60,7 +61,7 @@ for (i in seq_along(unique_plates)) {
     par(new=TRUE)
     plot(df_3$Mass..mg., type="l", col= "red", xlab= NA, ylab=NA, axes=F)
     axis(side=4, col.ticks="red", col.axis="red", las=0)
-    mtext("Mass (mg)", las=0, side=4,line=3, col="red")	
+    mtext("Mass (mg)", las=0, side=4,line=3, col="red", cex=0.8)	
         
     #50 mL sample
     unique_volumes_4 <- which(perc_inhibition_1$PA.Dose.Response.Data..Volume..nL. == 50)	
@@ -70,10 +71,11 @@ for (i in seq_along(unique_plates)) {
     par(new=TRUE)
     plot(df_4$Mass..mg., type="l", col= "red", xlab= NA, ylab=NA, axes=F)
     axis(side=4, col.ticks="red", col.axis="red", las=0)
-    mtext("Mass (mg)", las=0, side=4,line=3, col="red")	    
-    dev.new()
+    mtext("Mass (mg)", las=0, side=4,line=3, col="red", cex=0.8)	    
     
-    }
+    mtext(unique_plates[i], side=3, line=1, outer=TRUE, cex=2, font=2)    
+    dev.off()
+}
 
 
 unique_volumes_1 <- which(perc_inhibition_1$PA.Dose.Response.Data..Volume..nL. == 500)
@@ -84,10 +86,3 @@ df_2 <- perc_inhibition_1[unique_volumes_2,]
 df_3 <- perc_inhibition_1[unique_volumes_3,]
 
 
-
-
-plot(df_2$inv_pos_control, ylab= "% inhibition", xlab= "", main= "250 nL Sample", type = "l", col = "purple")
-par(new=TRUE)
-plot(df_2$Mass..mg., type="l", col= "red", xlab= NA, ylab=NA, axes=F)
-axis(side=4, col.ticks="red", col.axis="red", las=0)
-mtext("Mass (mg)", las=0, side=4,line=3, col="red")

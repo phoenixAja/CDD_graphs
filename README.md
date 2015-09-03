@@ -9,7 +9,7 @@
 
 ###**Introduction:**  
 
-This program was designed to run on R 3.2.0 ("_Full of Ingrediants_"), however this script will work on newer versions of R as well, but it has not yet been tested on those architypes.
+This program was designed to run on R 3.2.0 ("_Full of Ingredients_"), however this script will work on newer versions of R as well, but it has not yet been tested on those architypes.
 To successfully run this script you will need to execute it using terminal. If you are running this script from a windows platform I strongly recommend using [gitbash](https://git-for-windows.github.io/). If for some reason you want an alternative, you can use [cygwin](https://www.cygwin.com/). 
 To get the script **CDD_new.R** you can fork it from this repository to your own github account, or you can ask me to email it to you. Feel free to submit a pull request to me if you want to edit this file yourself or want to add changes.
 

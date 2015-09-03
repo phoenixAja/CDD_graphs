@@ -1,6 +1,8 @@
 #Author: Phoenix Logan
 
-data <- "CDD_report_6_17_15.csv"
+args <- commandArgs(trailingOnly = TRUE)
+data <- args[1]
+
 table <- read.csv(data, sep = ",", header = TRUE )
 df_count <- as.data.frame(table)
 

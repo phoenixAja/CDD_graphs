@@ -18,7 +18,7 @@ To get the script **CDD_new.R** you can fork it from this repository to your own
 * No additional R packages are needed to run this specific script.
 * Once R has been downloaded get the absolute path to Rscript.exe:
  1. For Windows this would most likely be located on the C Drive in Program files. 
-  >Ex:  /c/Program\\Files/R/R-3.2.0/bin/Rscript.exe
+  >Ex:  /c/Program\\ Files/R/R-3.2.0/bin/Rscript.exe
  
  2. For Linux and Mac This would be (most likely) in bin 
  

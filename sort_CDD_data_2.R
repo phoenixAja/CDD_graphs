@@ -30,7 +30,7 @@ order_indexes <- function(df){
 well_idx_vector <- as.vector(sapply(synonyms, get_well_index))
 
 ind <- data.frame(well_idx_vector=paste0(rep(LETTERS[1:8], each=11), c(1:11, 11:1)), stringsAsFactors=FALSE)
-
+ind2 <- as.vector(ind$well_idx_vector)
 CA_neg <- data_table$CA.Dose.Response.Data....negative.control....
 CA_inv_neg <- as.vector(sapply(CA_neg, inv_neg))
 CA_data <- data.frame(well_idx_vector, mass=data_table$Mass..mg., volume=data_table$CA.Dose.Response.Data..Volume..nL., neg_control=CA_inv_neg, stringsAsFactors = FALSE)
@@ -60,5 +60,45 @@ SA_DATA_parsed <- SA_data[SA_data_500,]
 SA_2 <- merge(ind, SA_DATA_parsed, by="well_idx_vector", sort=FALSE)
 
 
-#Plot the 4 datasetts
+#Plot the 4 dataset
+
+#CA Dataset
+  par(mfrow=c(2,2), mar=c(2.0, 4.0,2.0,4.0), oma=c(0,0,3,1))
+  plot(CA_2$neg_control, ylab= "% inhibition", xlab= "", xaxt='n', main= "CA sample", type = "l", col = "purple", ylim=c(0,100))
+  par(new=TRUE)
+  plot(CA_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F)
+  axis(side=4, col.ticks="red", col.axis="red", las=0)
+  axis(side=1, at=c(10,20,30,40,50,60,70,80), labels=ind2[c(10,20,30,40,50,60,70,80)])
+  mtext("Mass (mg)", las=0, side=4,line=3, col="red", cex=0.8)
+
+#EC Dataset  
+  plot(EC_2$neg_control, ylab= "% inhibition", xlab= "", xaxt='n',main= "EC Sample",                  
+       type = "l", col = "purple", ylim=c(0,100))
+  par(new=TRUE)
+  plot(EC_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F)
+  axis(side=4, col.ticks="red", col.axis="red", las=0)
+  axis(side=1, at=c(10,20,30,40,50,60,70,80), labels=ind2[c(10,20,30,40,50,60,70,80)])
+  mtext("Mass (mg)", las=0, side=4,line=3, col="red", cex=0.8)	
+  
+#PA Dataset
+  plot(PA_2$neg_control, ylab= "% inhibition", xlab= "",xaxt='n', main= "PA Sample",                  
+       type = "l", col = "purple", ylim=c(0,100))
+  par(new=TRUE)
+  plot(PA_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F)
+  axis(side=4, col.ticks="red", col.axis="red", las=0)
+  axis(side=1, at=c(10,20,30,40,50,60,70,80), labels=ind2[c(10,20,30,40,50,60,70,80)])
+  text(24,60,"C5")
+  mtext("Mass (mg)", las=0, side=4,line=3, col="red", cex=0.8)	
+  
+#SA Dataset 
+  plot(SA_2$neg_control, ylab= "% inhibition", xlab= "", xaxt='n',main= "SA Sample",                  
+       type = "l", col = "purple", ylim=c(0,100))
+  par(new=TRUE)
+  plot(SA_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F)
+  axis(side=4, col.ticks="red", col.axis="red", las=0)
+  axis(side=1, at=c(10,20,30,40,50,60,70,80), labels=ind2[c(10,20,30,40,50,60,70,80)])
+  mtext("Mass (mg)", las=0, side=4,line=3, col="red", cex=0.8)	    
+  
+  mtext(unique_plates[i], side=3, line=1, outer=TRUE, cex=2, font=2)    
+  dev.off()
 

@@ -1,9 +1,10 @@
 
-
+#create interactive command line arguments later
 data_table <- read.csv("WMMC317_4_strains_for_graph-wmass.csv", stringsAsFactors = FALSE)
 
 synonyms <- data_table$Synonyms
 
+#strip off the first part of the Synonym for well indexes
 get_well_index <- function(syn){
   well_idx_str <- strsplit(syn, "-")
   return(well_idx_str[[1]][2])

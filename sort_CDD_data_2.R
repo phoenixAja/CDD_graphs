@@ -27,7 +27,7 @@ order_indexes <- function(df){
   }
 }
 
-ordered_indexes <- c("A2", "A3","A4", "A5","A6", "A7","A8", "A9","A10", "A11", "B11","B10","B9","B8","B7","B6","B5","B")
+ordered_indexes <- c("A2", "A3","A4", "A5","A6", "A7","A8", "A9","A10", "A11", "B11","B10","B9","B8","B7","B6","B5","B4", "B3", "B2", "C2", "C3", "C4","C5","C6","C7","C8","C9","C10","C11","D11","D10","D9","D8","D7","D6","D5","D4","D3","D2","E2","E3","E4","E5","E6","E7","E8","E9","E10","E11","F11","")
 
 well_idx_vector <- as.vector(sapply(synonyms, get_well_index))
 
@@ -36,7 +36,6 @@ CA_inv_neg <- as.vector(sapply(CA_neg, inv_neg))
 CA_data <- data.frame(well_idx_vector, mass=data_table$Mass..mg., volume=data_table$CA.Dose.Response.Data..Volume..nL., neg_control=CA_inv_neg, stringsAsFactors = FALSE)
 CA_data_500 <- which(CA_data$volume == 500)
 CA_DATA_parsed <- CA_data[CA_data_500,]
-CA_test_frame <- CA_DATA_parsed[order]
 
 
 EC_neg <- data_table$EC.Dose.Response.Data....negative.control....

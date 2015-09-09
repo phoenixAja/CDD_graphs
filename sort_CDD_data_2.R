@@ -1,6 +1,7 @@
 
 #create interactive command line arguments later
-data_table <- read.csv("WMMC317_4_strains_for_graph-wmass.csv", stringsAsFactors = FALSE)
+args <- commandArgs(trailingOnly = TRUE)
+data_table <- args[1]
 
 synonyms <- data_table$Synonyms
 
@@ -64,88 +65,49 @@ SA_2 <- merge(ind, SA_DATA_parsed, by="well_idx_vector", sort=FALSE)
 #Plot the 4 dataset
 
 #CA Dataset
-  par(mfrow=c(4,1), mar=c(2.0, 4.0,2.0,4.0), oma=c(0,0,3,1))
-  plot(CA_2$neg_control, ylab= "% inhibition", xlab= "", xaxt='n', main= "CA sample", type = "l", col = "purple", ylim=c(0,100), cex=1.0)
-  par(new=TRUE)
-  plot(CA_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F)
-  axis(side=4, col.ticks="red", col.axis="red", las=0)
-  axis(side=1, at=c(10,20,30,40,50,60,70,80), labels=ind2[c(10,20,30,40,50,60,70,80)])
-  mtext("Mass (mg)", las=0, side=4,line=3, col="red", cex=0.8)
-
-#EC Dataset  
-  plot(EC_2$neg_control, ylab= "% inhibition", xlab= "", xaxt='n',main= "EC Sample",                  
-       type = "l", col = "green", ylim=c(0,100))
-  par(new=TRUE)
-  plot(EC_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F)
-  axis(side=4, col.ticks="red", col.axis="red", las=0)
-  axis(side=1, at=c(10,20,30,40,50,60,70,80), labels=ind2[c(10,20,30,40,50,60,70,80)])
-  mtext("Mass (mg)", las=0, side=4,line=3, col="red", cex=0.8)	
-  
-#PA Dataset
-  plot(PA_2$neg_control, ylab= "% inhibition", xlab= "",xaxt='n', main= "PA Sample",                  
-       type = "l", col = "purple", ylim=c(0,100))
-  text(24,60,"C5")
-  par(new=TRUE)
-  plot(PA_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F)
-  axis(side=4, col.ticks="red", col.axis="red", las=0)
-  axis(side=1, at=c(10,20,30,40,50,60,70,80), labels=ind2[c(10,20,30,40,50,60,70,80)])
-  
-  mtext("Mass (mg)", las=0, side=4,line=3, col="red", cex=0.8)	
-  
-#SA Dataset 
-  plot(SA_2$neg_control, ylab= "% inhibition", xlab= "", xaxt='n',main= "SA Sample",                  
-       type = "l", col = "purple", ylim=c(0,100))
-  par(new=TRUE)
-  plot(SA_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F)
-  axis(side=4, col.ticks="red", col.axis="red", las=0)
-  axis(side=1, at=c(10,20,30,40,50,60,70,80), labels=ind2[c(10,20,30,40,50,60,70,80)])
-  mtext("Mass (mg)", las=0, side=4,line=3, col="red", cex=0.8)	    
-  
-  mtext("500 nL", side=3, line=1, outer=TRUE, cex=2, font=2)    
-
-#Second Plots
-
-#CA Dataset
 par(mfrow=c(4,1), mar=c(2.0, 4.0,2.0,4.0), oma=c(1,1,3,1))
-plot(CA_2$neg_control, ylab= "", xlab= "", xaxt='n', main= "CA sample", type = "l", col = "purple", ylim=c(0,100), cex=1.0)
+plot(CA_2$neg_control, ylab= "", xlab= "", xaxt='n', main= "CA", type = "l", col = "black", ylim=c(0,100), cex=1.0, lwd=2)
+mtext("% Inhibition", side=2, line=2,las=0, font=1)
 par(new=TRUE)
-plot(CA_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F)
+plot(CA_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F, lwd=2)
 axis(side=4, col.ticks="red", col.axis="red", las=0)
 axis(side=1, at=c(10,20,30,40,50,60,70,80), labels=ind2[c(10,20,30,40,50,60,70,80)])
-#mtext("Mass (mg)", las=0, side=4,line=3, col="red", cex=0.8)
+mtext("Mass (mg)", las=0, side=4,line=2, col="red", cex=0.8)
 
 #EC Dataset  
-plot(EC_2$neg_control, ylab= "", xlab= "", xaxt='n',main= "EC Sample",                  
-     type = "l", col = "purple", ylim=c(0,100))
+plot(EC_2$neg_control, ylab= "", xlab= "", xaxt='n',main= "EC",                  
+     type = "l", col = "black", ylim=c(0,100), lwd=2)
+mtext("% Inhibition", side=2, line=2, las=0, font=1)
 par(new=TRUE)
 plot(EC_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F)
 axis(side=4, col.ticks="red", col.axis="red", las=0)
 axis(side=1, at=c(10,20,30,40,50,60,70,80), labels=ind2[c(10,20,30,40,50,60,70,80)])
-m#text("Mass (mg)", las=0, side=4,line=3, col="red", cex=0.8)  
+mtext("Mass (mg)", las=0, side=4,line=2, col="red", cex=0.8, font=1)  
 
 #PA Dataset
 plot(PA_2$neg_control, ylab= "", xlab= "",xaxt='n', main= "PA Sample",                  
-     type = "l", col = "purple", ylim=c(0,100))
+     type = "l", col = "black", ylim=c(0,100))
+mtext("% Inhibition", side=2, line=2, las=0, font =1)
 text(24,60,"C5")
 par(new=TRUE)
-plot(PA_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F)
+plot(PA_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F, lwd=2)
 axis(side=4, col.ticks="red", col.axis="red", las=0)
 axis(side=1, at=c(10,20,30,40,50,60,70,80), labels=ind2[c(10,20,30,40,50,60,70,80)])
-
-#mtext("Mass (mg)", las=0, side=4,line=3, col="red", cex=0.8)	
+mtext("Mass (mg)", las=0, side=4,line=2, col="red", cex=0.8, font=1)  
 
 #SA Dataset 
 plot(SA_2$neg_control, ylab= "", xlab= "", xaxt='n',main= "SA Sample",                  
-     type = "l", col = "purple", ylim=c(0,100))
+     type = "l", col = "black", ylim=c(0,100), lwd=2)
+mtext("% Inhibition", side=2, line=2, las=0, font =1)
 par(new=TRUE)
-plot(SA_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F)
+plot(SA_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F, lwd=2)
 axis(side=4, col.ticks="red", col.axis="red", las=0)
 axis(side=1, at=c(10,20,30,40,50,60,70,80), labels=ind2[c(10,20,30,40,50,60,70,80)])
-#mtext("Mass (mg)", las=0, side=4,line=3, col="red", cex=0.8)	    
+mtext("Mass (mg)", las=0, side=4,line=2, col="red", cex=0.8, font=1)	    
 
 mtext("500 nL", side=3, line=1, outer=TRUE, cex=2, font=2)    
-mtext("% Inhibition", side=2, line=1, outer=TRUE, cex=1, font=1) 
-mtext("Mass (mg)", col="red", side=4, line=1, outer=TRUE, cex=1.3, font=1.3) 
+mtext("% Inhibition", side=2, line=2, outer=TRUE, cex=1, font=1) 
+mtext("Mass (mg)", col="red", side=4, line=2, outer=TRUE, cex=1.3, font=1) 
 
 #Third Graphs
 par(mfrow=c(1,1), mar=c(2.0, 4.0,2.0,4.0), oma=c(0,0,3,1))

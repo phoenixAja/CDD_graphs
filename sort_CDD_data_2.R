@@ -1,8 +1,9 @@
 
-#create interactive command line arguments later
+#interactive command line arguments later
 args <- commandArgs(trailingOnly = TRUE)
 data_table <- args[1]
 
+#to get well names 
 synonyms <- data_table$Synonyms
 
 #strip off the first part of the Synonym for well indexes
@@ -11,6 +12,7 @@ get_well_index <- function(syn){
   return(well_idx_str[[1]][2])
 }
 
+#find % inhibition
 inv_neg <- function(x) {
   y <- 100-x
   #remove elements less than zero
@@ -22,17 +24,12 @@ inv_neg <- function(x) {
   }
 } 
 
-order_indexes <- function(df){
-  if (well == (A|C|E|G)[0-9]){
-    sort
-    
-  }
-}
-
 well_idx_vector <- as.vector(sapply(synonyms, get_well_index))
-
+#Organize the data by ascending/descending order
 ind <- data.frame(well_idx_vector=paste0(rep(LETTERS[1:8], each=11), c(1:11, 11:1)), stringsAsFactors=FALSE)
 ind2 <- as.vector(ind$well_idx_vector)
+
+#CA Data
 CA_neg <- data_table$CA.Dose.Response.Data....negative.control....
 CA_inv_neg <- as.vector(sapply(CA_neg, inv_neg))
 CA_data <- data.frame(well_idx_vector, mass=data_table$Mass..mg., volume=data_table$CA.Dose.Response.Data..Volume..nL., neg_control=CA_inv_neg, stringsAsFactors = FALSE)
@@ -40,6 +37,7 @@ CA_data_500 <- which(CA_data$volume == 500)
 CA_DATA_parsed <- CA_data[CA_data_500,]
 CA_2 <- merge(ind, CA_DATA_parsed, by="well_idx_vector", sort=FALSE)
 
+#EC Data
 EC_neg <- data_table$EC.Dose.Response.Data....negative.control....
 EC_inv_neg <- as.vector(sapply(EC_neg, inv_neg))
 EC_data <- data.frame(well_idx_vector, mass=data_table$Mass..mg., volume=data_table$EC.Dose.Response.Data..Volume..nL., neg_control=EC_inv_neg, stringsAsFactors = FALSE)
@@ -47,6 +45,7 @@ EC_data_500 <- which(EC_data$volume == 500)
 EC_DATA_parsed <- EC_data[EC_data_500,]
 EC_2 <- merge(ind, EC_DATA_parsed, by="well_idx_vector", sort=FALSE)
 
+#PA Data
 PA_neg <- data_table$PA.Dose.Response.Data....negative.control....
 PA_inv_neg <- as.vector(sapply(PA_neg, inv_neg))
 PA_data <- data.frame(well_idx_vector, mass=data_table$Mass..mg., volume=data_table$PA.Dose.Response.Data..Volume..nL., neg_control=PA_inv_neg, stringsAsFactors = FALSE)
@@ -54,6 +53,7 @@ PA_data_500 <- which(PA_data$volume == 500)
 PA_DATA_parsed <- PA_data[PA_data_500,]
 PA_2 <- merge(ind, PA_DATA_parsed, by="well_idx_vector", sort=FALSE)
 
+#SA Data
 SA_neg <- data_table$SA.Dose.Response.Data....negative.control....
 SA_inv_neg <- as.vector(sapply(SA_neg, inv_neg))
 SA_data <- data.frame(well_idx_vector, mass=data_table$Mass..mg., volume=data_table$SA.Dose.Response.Data..Volume..nL., neg_control=SA_inv_neg, stringsAsFactors = FALSE)
@@ -62,7 +62,7 @@ SA_DATA_parsed <- SA_data[SA_data_500,]
 SA_2 <- merge(ind, SA_DATA_parsed, by="well_idx_vector", sort=FALSE)
 
 
-#Plot the 4 dataset
+#Plot the 4 dataset in Landscape view
 
 #CA Dataset
 par(mfrow=c(4,1), mar=c(2.0, 4.0,2.0,4.0), oma=c(1,1,3,1))
@@ -109,7 +109,7 @@ mtext("500 nL", side=3, line=1, outer=TRUE, cex=2, font=2)
 mtext("% Inhibition", side=2, line=2, outer=TRUE, cex=1, font=1) 
 mtext("Mass (mg)", col="red", side=4, line=2, outer=TRUE, cex=1.3, font=1) 
 
-#Third Graphs
+#Overlapping lines graph
 par(mfrow=c(1,1), mar=c(2.0, 4.0,2.0,4.0), oma=c(0,0,3,1))
 plot(CA_2$neg_control, ylab= "% inhibition", xlab= "", xaxt='n', main= "Strain Samples at 500nL", type = "l", col = "purple", ylim=c(0,100), cex=1.0, lwd=4)
 par(new=TRUE)

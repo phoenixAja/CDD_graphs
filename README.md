@@ -29,6 +29,9 @@ To get the script **CDD_new.R** you can fork it from this repository to your own
 2.  When in desired location run the following command:
 >Ex: /c/Program\\Files/R/R-3.2.0/bin/Rscript.exe CDD\_new.R CDD_File.csv
  
+###**Output:**
+1. a graph of output data presented in landscape and overlayed fashion
+
  * A Few Important Notes:
   * Data to be parsed must have a .csv extension
   * Specify the full path to the R script (**CDD\_new.R**) In this case I am running the script from the same directory where the parsed files are located.

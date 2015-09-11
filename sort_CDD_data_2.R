@@ -26,6 +26,9 @@ inv_neg <- function(x) {
   }
 } 
 
+file_name <- unlist(strsplit(args[1], "[.]"))
+jpeg(paste0(file_name[1], "landscape.jpg"))
+
 well_idx_vector <- as.vector(sapply(synonyms, get_well_index))
 
 ind <- data.frame(well_idx_vector=paste0(rep(LETTERS[1:8], each=11), c(1:11, 11:1)), stringsAsFactors=FALSE)
@@ -44,6 +47,9 @@ CA_data <- data.frame(well_idx_vector, mass=data_table$Mass..mg., volume=data_ta
 CA_data_500 <- which(CA_data$volume == 500)
 CA_DATA_parsed <- CA_data[CA_data_500,]
 CA_2 <- merge(ind, CA_DATA_parsed, by="well_idx_vector", sort=FALSE)
+CA_over_fiddy_pos <- which(CA_DATA_parsed$neg_control >= 50.0)
+CA_over_fiddy <- CA_DATA_parsed[CA_over_fiddy_pos,]
+write.csv(CA_over_fiddy, file=paste0(file_name[1], "_CA_.csv"))
 
 #EC Data
 
@@ -53,6 +59,9 @@ EC_data <- data.frame(well_idx_vector, mass=data_table$Mass..mg., volume=data_ta
 EC_data_500 <- which(EC_data$volume == 500)
 EC_DATA_parsed <- EC_data[EC_data_500,]
 EC_2 <- merge(ind, EC_DATA_parsed, by="well_idx_vector", sort=FALSE)
+EC_over_fiddy_pos <- which(EC_DATA_parsed$neg_control >= 50.0)
+EC_over_fiddy <- EC_DATA_parsed[EC_over_fiddy_pos,]
+write.csv(EC_over_fiddy, file=paste0(file_name[1], "_EC_.csv"))
 
 #PA Data
 
@@ -62,6 +71,10 @@ PA_data <- data.frame(well_idx_vector, mass=data_table$Mass..mg., volume=data_ta
 PA_data_500 <- which(PA_data$volume == 500)
 PA_DATA_parsed <- PA_data[PA_data_500,]
 PA_2 <- merge(ind, PA_DATA_parsed, by="well_idx_vector", sort=FALSE)
+PA_over_fiddy_pos <- which(PA_DATA_parsed$neg_control >= 50.0)
+PA_over_fiddy <- PA_DATA_parsed[PA_over_fiddy_pos,]
+write.csv(PA_over_fiddy, file=paste0(file_name[1], "_PA_.csv"))
+
 
 
 SA_neg <- data_table$SA.Dose.Response.Data....negative.control....
@@ -70,10 +83,13 @@ SA_data <- data.frame(well_idx_vector, mass=data_table$Mass..mg., volume=data_ta
 SA_data_500 <- which(SA_data$volume == 500)
 SA_DATA_parsed <- SA_data[SA_data_500,]
 SA_2 <- merge(ind, SA_DATA_parsed, by="well_idx_vector", sort=FALSE)
+SA_over_fiddy_pos <- which(SA_DATA_parsed$neg_control >= 50.0)
+SA_over_fiddy <- SA_DATA_parsed[SA_over_fiddy_pos,]
+write.csv(SA_over_fiddy, file=paste0(file_name[1], "_SA_.csv"))
+
 
 #Plot the 4 dataset
-file_name <- unlist(strsplit(args[1], "[.]"))
-jpeg(paste0(file_name[1], "landscape.jpg"))
+
 
 #Plot the 4 dataset in Landscape view
 
@@ -92,7 +108,7 @@ plot(EC_2$neg_control, ylab= "", xlab= "", xaxt='n',main= "EC",
      type = "l", col = "black", ylim=c(0,100), lwd=2)
 mtext("% Inhibition", side=2, line=2, las=0, font=1)
 par(new=TRUE)
-plot(EC_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F)
+plot(EC_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F, lwd=2)
 axis(side=4, col.ticks="red", col.axis="red", las=0)
 axis(side=1, at=c(10,20,30,40,50,60,70,80), labels=ind2[c(10,20,30,40,50,60,70,80)])
 mtext("Mass (mg)", las=0, side=4,line=2, col="red", cex=0.8, font=1)  
@@ -101,7 +117,6 @@ mtext("Mass (mg)", las=0, side=4,line=2, col="red", cex=0.8, font=1)
 plot(PA_2$neg_control, ylab= "", xlab= "",xaxt='n', main= "PA Sample",                  
      type = "l", col = "black", ylim=c(0,100))
 mtext("% Inhibition", side=2, line=2, las=0, font =1)
-text(24,60,"C5")
 par(new=TRUE)
 plot(PA_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F, lwd=2)
 axis(side=4, col.ticks="red", col.axis="red", las=0)

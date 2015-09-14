@@ -5,16 +5,15 @@ args <- commandArgs(trailingOnly = TRUE)
 data_table <- read.csv(args[1], stringsAsFactors=FALSE)
 
 #to get well names 
-
 synonyms <- data_table$Synonyms
 
 #strip off the first part of the Synonym for well indexes
-get_well_index <- function(syn){
+get_strain_info <- function(syn, num){
   well_idx_str <- strsplit(syn, "-")
-  return(well_idx_str[[1]][2])
+  return(well_idx_str[[1]][num])
 }
 
-
+#get % Inhibition
 inv_neg <- function(x) {
   y <- 100-x
   #remove elements less than zero
@@ -26,22 +25,104 @@ inv_neg <- function(x) {
   }
 } 
 
+#get file name
 file_name <- unlist(strsplit(args[1], "[.]"))
 jpeg(paste0(file_name[1], "landscape.jpg"))
 
-well_idx_vector <- as.vector(sapply(synonyms, get_well_index))
+#get strain name and well
+well_idx_vector <- as.vector(sapply(synonyms, get_strain_info, num=2))
+well_strain_vector <- as.vector(sapply(synonyms, get_strain_info, num=1))
+
 #Organize the data by ascending/descending order
 ind <- data.frame(well_idx_vector=paste0(rep(LETTERS[1:8], each=11), c(1:11, 11:1)), stringsAsFactors=FALSE)
 ind2 <- as.vector(ind$well_idx_vector)
 
-#CA Data
+unique_strains <- unique(well_strain_vector)
 
+get_data <- function(unique_strain, df){
+  
+  unique_selection_1 <- grep(paste0(unique_strain, "-[A-B][0-9][0-9]"), df$Synonyms)
+  unique_2 <- df[unique_selection_1,]
+  
+  #CA Data
+  CA_neg <- unique_2$CA.Dose.Response.Data....negative.control....
+  CA_inv_neg <- as.vector(sapply(CA_neg, inv_neg))
+  CA_data <- data.frame(well_idx_vector, mass=unique_2$Mass..mg., volume=unique_2$CA.Dose.Response.Data..Volume..nL., neg_control=CA_inv_neg, stringsAsFactors = FALSE)
+  CA_data_500 <- which(CA_data$volume == 500)
+  CA_DATA_parsed <- CA_data[CA_data_500,]
+  CA_sorted_df <- merge(ind, CA_DATA_parsed, by="well_idx_vector", sort=FALSE)
+  CA_over_fiddy_pos <- which(CA_sorted_df$neg_control >= 50.0)
+  CA_over_fiddy <- CA_sorted_df[CA_over_fiddy_pos,]
+  write.csv( CA_over_fiddy, file=paste0(unique_strain, "CA_.csv"))
+  
+  #EC Data
+  EC_neg <- unique_2$EC.Dose.Response.Data....negative.control....
+  EC_inv_neg <- as.vector(sapply(EC_neg, inv_neg))
+  EC_data <- data.frame(well_idx_vector, mass=unique_2$Mass..mg., volume=unique_2$EC.Dose.Response.Data..Volume..nL., neg_control=EC_inv_neg, stringsAsFactors = FALSE)
+  EC_data_500 <- which(EC_data$volume == 500)
+  EC_DATA_parsed <- EC_data[EC_data_500,]
+  EC_2 <- merge(ind, EC_DATA_parsed, by="well_idx_vector", sort=FALSE)
+  EC_over_fiddy_pos <- which(EC_DATA_parsed$neg_control >= 50.0)
+  EC_over_fiddy <- EC_2[EC_over_fiddy_pos,]
+  write.csv(EC_over_fiddy, file=paste0(file_name[1], "_EC_.csv"))
+  
+  #PA Data
+  PA_neg <- unique_2$PA.Dose.Response.Data....negative.control....
+  PA_inv_neg <- as.vector(sapply(PA_neg, inv_neg))
+  PA_data <- data.frame(well_idx_vector, mass=unique_2$Mass..mg., volume=unique_2$PA.Dose.Response.Data..Volume..nL., neg_control=PA_inv_neg, stringsAsFactors = FALSE)
+  PA_data_500 <- which(PA_data$volume == 500)
+  PA_DATA_parsed <- PA_data[PA_data_500,]
+  PA_2 <- merge(ind, PA_DATA_parsed, by="well_idx_vector", sort=FALSE)
+  PA_over_fiddy_pos <- which(PA_DATA_parsed$neg_control >= 50.0)
+  PA_over_fiddy <- PA_2[PA_over_fiddy_pos,]
+  write.csv(PA_over_fiddy, file=paste0(file_name[1], "_PA_.csv"))
+  
+  #SA Data
+  SA_neg <- unique_2$SA.Dose.Response.Data....negative.control....
+  SA_inv_neg <- as.vector(sapply(SA_neg, inv_neg))
+  SA_data <- data.frame(well_idx_vector, mass=unique_2$Mass..mg., volume=unique_2$SA.Dose.Response.Data..Volume..nL., neg_control=SA_inv_neg, stringsAsFactors = FALSE)
+  SA_data_500 <- which(SA_data$volume == 500)
+  SA_DATA_parsed <- SA_data[SA_data_500,]
+  SA_2 <- merge(ind, SA_DATA_parsed, by="well_idx_vector", sort=FALSE)
+  SA_over_fiddy_pos <- which(SA_DATA_parsed$neg_control >= 50.0)
+  SA_over_fiddy <- SA_2[SA_over_fiddy_pos,]
+  write.csv(SA_over_fiddy, file=paste0(file_name[1], "_SA_.csv"))
+  
+  jpeg(paste0(unique_strain, ".jpg"))
+  par(mfrow=c(4,1), mar=c(2.0, 4.0,2.0,4.0), oma=c(1,1,3,1))
+  plot_landscape(CA_2, "CA")
+  plot_landscape(EC_2, "EC")
+  plot_landscape(PA_2, "PA")
+  plot_landscape(SA_2, "SA")
+  mtext("500 nL", side=3, line=1, outer=TRUE, cex=2, font=2)
+  dev.off()
+}
+
+#Plot the 4 dataset in Landscape view
+
+plot_landscape <- function(df_name, Name){
+  plot(df_name$neg_control, ylab= "", xlab= "", xaxt='n', 
+       main= Name, type = "l", col = "black", ylim=c(0,100), cex=1.0, lwd=2)
+  mtext("% Inhibition", side=2, line=2,las=0, font=1)
+  par(new=TRUE)
+  plot(df_name$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F, 
+       lwd=1, ylim=c(0,0.5))
+  axis(side=4, col.ticks="red", col.axis="red", las=0)
+  axis(side=1, at=c(10,20,30,40,50,60,70,80), labels=ind2[c(10,20,30,40,50,60,70,80)])
+  mtext("Mass (mg)", las=0, side=4,line=2, col="red", cex=0.8) 
+}
+
+
+#CA Data
 CA_neg <- data_table$CA.Dose.Response.Data....negative.control....
 CA_inv_neg <- as.vector(sapply(CA_neg, inv_neg))
 CA_data <- data.frame(well_idx_vector, mass=data_table$Mass..mg., volume=data_table$CA.Dose.Response.Data..Volume..nL., neg_control=CA_inv_neg, stringsAsFactors = FALSE)
 CA_data_500 <- which(CA_data$volume == 500)
 CA_DATA_parsed <- CA_data[CA_data_500,]
-CA_2 <- merge(ind, CA_DATA_parsed, by="well_idx_vector", sort=FALSE)
+
+unique_strains <- unique(well_strain_vector)
+sapply(unique_strains, get_data, df=data_table)
+
 CA_over_fiddy_pos <- which(CA_DATA_parsed$neg_control >= 50.0)
 CA_over_fiddy <- CA_DATA_parsed[CA_over_fiddy_pos,]
 write.csv(CA_over_fiddy, file=paste0(file_name[1], "_CA_.csv"))
@@ -86,51 +167,11 @@ write.csv(SA_over_fiddy, file=paste0(file_name[1], "_SA_.csv"))
 #Plot the 4 dataset
 
 
-#Plot the 4 dataset in Landscape view
 
 #CA Dataset
-par(mfrow=c(4,1), mar=c(2.0, 4.0,2.0,4.0), oma=c(1,1,3,1))
-plot(CA_2$neg_control, ylab= "", xlab= "", xaxt='n', main= "CA", type = "l", col = "black", ylim=c(0,100), cex=1.0, lwd=2)
-mtext("% Inhibition", side=2, line=2,las=0, font=1)
-par(new=TRUE)
-plot(CA_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F, lwd=1, ylim=c(0,0.5))
-axis(side=4, col.ticks="red", col.axis="red", las=0)
-axis(side=1, at=c(10,20,30,40,50,60,70,80), labels=ind2[c(10,20,30,40,50,60,70,80)])
-mtext("Mass (mg)", las=0, side=4,line=2, col="red", cex=0.8)
 
-#EC Dataset  
-plot(EC_2$neg_control, ylab= "", xlab= "", xaxt='n',main= "EC",                  
-     type = "l", col = "black", ylim=c(0,100), lwd=2)
-mtext("% Inhibition", side=2, line=2, las=0, font=1)
-par(new=TRUE)
-plot(EC_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F, lwd=1, ylim=c(0,0.5))
-axis(side=4, col.ticks="red", col.axis="red", las=0)
-axis(side=1, at=c(10,20,30,40,50,60,70,80), labels=ind2[c(10,20,30,40,50,60,70,80)])
-mtext("Mass (mg)", las=0, side=4,line=2, col="red", cex=0.8, font=1)  
-
-#PA Dataset
-plot(PA_2$neg_control, ylab= "", xlab= "",xaxt='n', main= "PA Sample",                  
-     type = "l", col = "black", ylim=c(0,100), lwd=2)
-mtext("% Inhibition", side=2, line=2, las=0, font =1)
-par(new=TRUE)
-plot(PA_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F, lwd=1, ylim=c(0,0.5))
-axis(side=4, col.ticks="red", col.axis="red", las=0)
-axis(side=1, at=c(10,20,30,40,50,60,70,80), labels=ind2[c(10,20,30,40,50,60,70,80)])
-mtext("Mass (mg)", las=0, side=4,line=2, col="red", cex=0.8, font=1)  
-
-#SA Dataset 
-plot(SA_2$neg_control, ylab= "", xlab= "", xaxt='n',main= "SA Sample",                  
-     type = "l", col = "black", ylim=c(0,100), lwd=2)
-mtext("% Inhibition", side=2, line=2, las=0, font =1)
-par(new=TRUE)
-plot(SA_2$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F, lwd=1, ylim=c(0,0.5))
-axis(side=4, col.ticks="red", col.axis="red", las=0)
-axis(side=1, at=c(10,20,30,40,50,60,70,80), labels=ind2[c(10,20,30,40,50,60,70,80)])
-mtext("Mass (mg)", las=0, side=4,line=2, col="red", cex=0.8, font=1)	    
-
-mtext("500 nL", side=3, line=1, outer=TRUE, cex=2, font=2)    
-mtext("% Inhibition", side=2, line=2, outer=TRUE, cex=1, font=1) 
-mtext("Mass (mg)", col="red", side=4, line=2, outer=TRUE, cex=1.3, font=1) 
+plot_all_4 <- function()
+    
 
 dev.off()
 

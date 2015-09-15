@@ -37,7 +37,6 @@ well_strain_vector <- as.vector(sapply(synonyms, get_strain_info, num=1))
 ind <- data.frame(Wells=paste0(rep(LETTERS[1:8], each=10), c("02","03","04","05","06","07","08","09","10","11", "11","10","09","08","07","06","05","04","03","02")), stringsAsFactors=FALSE)
 
 #Plot the 4 dataset in Landscape view
-
 plot_landscape <- function(df_name, Name){
   plot(df_name$neg_control, ylab= "", xlab= "", xaxt='n', 
        main= Name, type = "l", col = "black", ylim=c(0,100), cex=1.0, lwd=2)
@@ -69,16 +68,14 @@ plot_overlay <- function(CA,EC,PA,SA, unique_strain){
     axis(side=4, col.ticks="red", col.axis="red", las=0)
     axis(side=1, at=c(1:80), labels=ind$Wells, font=0.2, las=2, cex.axis=0.5)
     mtext("Mass (mg)", las=0, side=4,line=3, col="red", cex=0.8)
-    
     legend("topright", c("CA","EC","SA","PA", "Mass"), col=c("purple", "green", "blue","orange", "red"), cex=0.5, pch=19, pt.cex =0.5)
-
     dev.off()
 }
 
-
-
+#Parse data by each unique strain and plot landscape and overlay graphs
 get_data <- function(unique_strain, df){
   
+  #grep out the unique strain
   unique_selection_1 <- grep(paste0(unique_strain, "-[A-Z][0-9][0-9]"), df$Synonyms)
   unique_2 <- df[unique_selection_1,]
   unique_syns <- unique_2$Synonyms
@@ -91,9 +88,8 @@ get_data <- function(unique_strain, df){
   CA_data_500 <- which(CA_data$volume == 500)
   CA_DATA_parsed <- CA_data[CA_data_500,]
   CA_2 <- merge(ind, CA_DATA_parsed, by="Wells", sort=FALSE)
-  CA_over_fiddy_pos <- which(CA_DATA_parsed$neg_control >= 50.0)
-  CA_over_fiddy <- CA_2[CA_over_fiddy_pos,]
-  #write.csv( CA_over_fiddy, file=paste0(unique_strain, "CA_.csv"))
+  #CA_over_fiddy_pos <- which(CA_DATA_parsed$neg_control >= 50.0)
+  #CA_over_fiddy <- CA_2[CA_over_fiddy_pos,]
   
   #EC Data
   EC_neg <- unique_2$EC.Dose.Response.Data....negative.control....
@@ -102,9 +98,9 @@ get_data <- function(unique_strain, df){
   EC_data_500 <- which(EC_data$volume == 500)
   EC_DATA_parsed <- EC_data[EC_data_500,]
   EC_2 <- merge(ind, EC_DATA_parsed, by="Wells", sort=FALSE)
-  EC_over_fiddy_pos <- which(EC_DATA_parsed$neg_control >= 50.0)
-  EC_over_fiddy <- EC_2[EC_over_fiddy_pos,]
-  write.csv(EC_over_fiddy, file=paste0(file_name[1], "_EC_.csv"))
+  #EC_over_fiddy_pos <- which(EC_DATA_parsed$neg_control >= 50.0)
+  #EC_over_fiddy <- EC_2[EC_over_fiddy_pos,]
+  #write.csv(EC_over_fiddy, file=paste0(file_name[1], "_EC_.csv"))
   
   #PA Data
   PA_neg <- unique_2$PA.Dose.Response.Data....negative.control....
@@ -113,9 +109,9 @@ get_data <- function(unique_strain, df){
   PA_data_500 <- which(PA_data$volume == 500)
   PA_DATA_parsed <- PA_data[PA_data_500,]
   PA_2 <- merge(ind, PA_DATA_parsed, by="Wells", sort=FALSE)
-  PA_over_fiddy_pos <- which(PA_DATA_parsed$neg_control >= 50.0)
-  PA_over_fiddy <- PA_2[PA_over_fiddy_pos,]
-  write.csv(PA_over_fiddy, file=paste0(file_name[1], "_PA_.csv"))
+  #PA_over_fiddy_pos <- which(PA_DATA_parsed$neg_control >= 50.0)
+  #PA_over_fiddy <- PA_2[PA_over_fiddy_pos,]
+  #write.csv(PA_over_fiddy, file=paste0(file_name[1], "_PA_.csv"))
   
   #SA Data
   SA_neg <- unique_2$SA.Dose.Response.Data....negative.control....
@@ -124,9 +120,9 @@ get_data <- function(unique_strain, df){
   SA_data_500 <- which(SA_data$volume == 500)
   SA_DATA_parsed <- SA_data[SA_data_500,]
   SA_2 <- merge(ind, SA_DATA_parsed, by="Wells", sort=FALSE)
-  SA_over_fiddy_pos <- which(SA_DATA_parsed$neg_control >= 50.0)
-  SA_over_fiddy <- SA_2[SA_over_fiddy_pos,]
-  write.csv(SA_over_fiddy, file=paste0(file_name[1], "_SA_.csv"))
+  #SA_over_fiddy_pos <- which(SA_DATA_parsed$neg_control >= 50.0)
+  #SA_over_fiddy <- SA_2[SA_over_fiddy_pos,]
+  #write.csv(SA_over_fiddy, file=paste0(file_name[1], "_SA_.csv"))
   
   jpeg(paste0(unique_strain, ".jpg"))
   par(mfrow=c(4,1), mar=c(2.0, 4.0,2.0,4.0), oma=c(1,1,3,1))

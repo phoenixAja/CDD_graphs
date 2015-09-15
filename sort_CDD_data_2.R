@@ -46,7 +46,7 @@ plot_landscape <- function(df_name, Name){
   plot(df_name$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F, 
        lwd=1, ylim=c(0,0.5))
   axis(side=4, col.ticks="red", col.axis="red", las=0)
-  axis(side=1, at=c(1:80), labels=ind$Wells)
+  axis(side=1, at=c(1:80), labels=ind$Wells, las=2, cex.axis=0.5)
   mtext("Mass (mg)", las=0, side=4,line=2, col="red", cex=0.8) 
 }
 
@@ -67,7 +67,7 @@ plot_overlay <- function(CA,EC,PA,SA, unique_strain){
     par(new=TRUE)
     plot(PA$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F, lwd=4, ylim=c(0,0.5))
     axis(side=4, col.ticks="red", col.axis="red", las=0)
-    axis(side=1, at=c(1:80), labels=ind$Wells, font=0.2, las=0)
+    axis(side=1, at=c(1:80), labels=ind$Wells, font=0.2, las=2, cex.axis=0.5)
     mtext("Mass (mg)", las=0, side=4,line=3, col="red", cex=0.8)
     
     legend("topright", c("CA","EC","SA","PA", "Mass"), col=c("purple", "green", "blue","orange", "red"), cex=0.5, pch=19, pt.cex =0.5)

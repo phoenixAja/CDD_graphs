@@ -51,6 +51,7 @@ plot_landscape <- function(df_name, Name){
 
 #Plot all four strains overlayed
 plot_overlay <- function(CA,EC,PA,SA, unique_strain){
+    #function will overlay all lines crated through % inhibition
     jpeg(paste0(unique_strain, "_overlay.jpg"))
     par(mfrow=c(1,1), mar=c(2.0, 4.0,2.0,4.0), oma=c(0,0,3,1))
     plot(CA$neg_control, ylab= "% inhibition", xlab= "", xaxt='n', main= "Strain Samples at 500nL", type = "l", col = "purple", ylim=c(0,100), cex=1.0, lwd=4)

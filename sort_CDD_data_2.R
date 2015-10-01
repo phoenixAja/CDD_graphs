@@ -1,4 +1,4 @@
-
+#Author: Phoenix Logan
 
 #create interactive command line arguments later
 args <- commandArgs(trailingOnly = TRUE)

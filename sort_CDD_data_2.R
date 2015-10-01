@@ -89,8 +89,6 @@ get_data <- function(unique_strain, df){
   CA_data_500 <- which(CA_data$volume == 500)
   CA_DATA_parsed <- CA_data[CA_data_500,]
   CA_2 <- merge(ind, CA_DATA_parsed, by="Wells", sort=FALSE)
-  #CA_over_fiddy_pos <- which(CA_DATA_parsed$neg_control >= 50.0)
-  #CA_over_fiddy <- CA_2[CA_over_fiddy_pos,]
   
   #EC Data
   EC_neg <- unique_2$EC.Dose.Response.Data....negative.control....
@@ -99,10 +97,7 @@ get_data <- function(unique_strain, df){
   EC_data_500 <- which(EC_data$volume == 500)
   EC_DATA_parsed <- EC_data[EC_data_500,]
   EC_2 <- merge(ind, EC_DATA_parsed, by="Wells", sort=FALSE)
-  #EC_over_fiddy_pos <- which(EC_DATA_parsed$neg_control >= 50.0)
-  #EC_over_fiddy <- EC_2[EC_over_fiddy_pos,]
-  #write.csv(EC_over_fiddy, file=paste0(file_name[1], "_EC_.csv"))
-  
+
   #PA Data
   PA_neg <- unique_2$PA.Dose.Response.Data....negative.control....
   PA_inv_neg <- as.vector(sapply(PA_neg, inv_neg))
@@ -110,9 +105,6 @@ get_data <- function(unique_strain, df){
   PA_data_500 <- which(PA_data$volume == 500)
   PA_DATA_parsed <- PA_data[PA_data_500,]
   PA_2 <- merge(ind, PA_DATA_parsed, by="Wells", sort=FALSE)
-  #PA_over_fiddy_pos <- which(PA_DATA_parsed$neg_control >= 50.0)
-  #PA_over_fiddy <- PA_2[PA_over_fiddy_pos,]
-  #write.csv(PA_over_fiddy, file=paste0(file_name[1], "_PA_.csv"))
   
   #SA Data
   SA_neg <- unique_2$SA.Dose.Response.Data....negative.control....
@@ -121,9 +113,6 @@ get_data <- function(unique_strain, df){
   SA_data_500 <- which(SA_data$volume == 500)
   SA_DATA_parsed <- SA_data[SA_data_500,]
   SA_2 <- merge(ind, SA_DATA_parsed, by="Wells", sort=FALSE)
-  #SA_over_fiddy_pos <- which(SA_DATA_parsed$neg_control >= 50.0)
-  #SA_over_fiddy <- SA_2[SA_over_fiddy_pos,]
-  #write.csv(SA_over_fiddy, file=paste0(file_name[1], "_SA_.csv"))
   
   jpeg(paste0(unique_strain, ".jpg"))
   par(mfrow=c(4,1), mar=c(2.0, 4.0,2.0,4.0), oma=c(1,1,3,1))

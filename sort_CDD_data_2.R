@@ -87,44 +87,19 @@ get_strain_df <- function(unique_strain, prefix, wells){
 }
 
 get_data <- function(unique_strain, df){
-  
   #grep out the unique strain
   unique_selection_1 <- grep(paste0(unique_strain, "-[A-Z][0-9][0-9]"), df$Synonyms)
   unique_2 <- df[unique_selection_1,]
   unique_syns <- unique_2$Synonyms
   wells <- as.vector(sapply(unique_syns, get_strain_info, num=2))
-  
   #CA Data
-  #CA_neg <- unique_2$CA.Dose.Response.Data....negative.control....
-  #CA_inv_neg <- as.vector(sapply(CA_neg, inv_neg))
-  #CA_data <- data.frame(Wells=wells, mass=unique_2$Mass..mg., volume=unique_2$CA.Dose.Response.Data..Volume..nL., neg_control=CA_inv_neg, stringsAsFactors = FALSE)
-  #CA_data_500 <- which(CA_data$volume == 500)
- # CA_DATA_parsed <- CA_data[CA_data_500,]
-  CA_2 <- get_strain_df(unique_2, "CA", wells)
-  
+  CA_2 <- get_strain_df(unique_2, "CA", wells) 
   #EC Data
-  EC_neg <- unique_2$EC.Dose.Response.Data....negative.control....
-  EC_inv_neg <- as.vector(sapply(EC_neg, inv_neg))
-  EC_data <- data.frame(Wells=wells, mass=unique_2$Mass..mg., volume=unique_2$EC.Dose.Response.Data..Volume..nL., neg_control=EC_inv_neg, stringsAsFactors = FALSE)
-  EC_data_500 <- which(EC_data$volume == 500)
-  EC_DATA_parsed <- EC_data[EC_data_500,]
-  EC_2 <- merge(ind, EC_DATA_parsed, by="Wells", sort=FALSE)
-
+  EC_2 <- get_strain_df(unique_2, "EC", wells)
   #PA Data
-  PA_neg <- unique_2$PA.Dose.Response.Data....negative.control....
-  PA_inv_neg <- as.vector(sapply(PA_neg, inv_neg))
-  PA_data <- data.frame(Wells=wells, mass=unique_2$Mass..mg., volume=unique_2$PA.Dose.Response.Data..Volume..nL., neg_control=PA_inv_neg, stringsAsFactors = FALSE)
-  PA_data_500 <- which(PA_data$volume == 500)
-  PA_DATA_parsed <- PA_data[PA_data_500,]
-  PA_2 <- merge(ind, PA_DATA_parsed, by="Wells", sort=FALSE)
-  
+  PA_2 <- get_strain_df(unique_2, "PA", wells)
   #SA Data
-  SA_neg <- unique_2$SA.Dose.Response.Data....negative.control....
-  SA_inv_neg <- as.vector(sapply(SA_neg, inv_neg))
-  SA_data <- data.frame(Wells=wells, mass=unique_2$Mass..mg., volume=unique_2$SA.Dose.Response.Data..Volume..nL., neg_control=SA_inv_neg, stringsAsFactors = FALSE)
-  SA_data_500 <- which(SA_data$volume == 500)
-  SA_DATA_parsed <- SA_data[SA_data_500,]
-  SA_2 <- merge(ind, SA_DATA_parsed, by="Wells", sort=FALSE)
+  SA_2 <- get_strain_df(unique_2, "CA", wells)
   
   jpeg(paste0(unique_strain, ".jpg"))
   par(mfrow=c(4,1), mar=c(2.0, 4.0,2.0,4.0), oma=c(1,1,3,1))
@@ -134,7 +109,6 @@ get_data <- function(unique_strain, df){
   plot_landscape(SA_2, "SA")
   mtext(paste0(unique_strain," 500 nL"), side=3, line=1, outer=TRUE, cex=2, font=2)
   dev.off()
-  
   plot_overlay(CA_2,EC_2,PA_2,SA_2, unique_strain)
 }
 

@@ -1,12 +1,5 @@
 #Author: Phoenix Logan
 
-#create interactive command line arguments later
-args <- commandArgs(trailingOnly = TRUE)
-data_table <- read.csv(args[1], stringsAsFactors=FALSE)
-
-#to get well names 
-synonyms <- data_table$Synonyms
-
 #strip off the first part of the Synonym for well indexes
 get_strain_info <- function(syn, num){
   well_idx_str <- strsplit(syn, "-")
@@ -24,17 +17,6 @@ inv_neg <- function(x) {
     return(0)
   }
 } 
-
-#get file name
-file_name <- unlist(strsplit(args[1], "[.]"))
-jpeg(paste0(file_name[1], "landscape.jpg"))
-
-#get strain name and well
-well_idx_vector <- as.vector(sapply(synonyms, get_strain_info, num=2))
-well_strain_vector <- as.vector(sapply(synonyms, get_strain_info, num=1))
-
-#Organize the data by ascending/descending order
-ind <- data.frame(Wells=paste0(rep(LETTERS[1:8], each=10), c("02","03","04","05","06","07","08","09","10","11", "11","10","09","08","07","06","05","04","03","02")), stringsAsFactors=FALSE)
 
 #Plot the 4 dataset in Landscape view
 plot_landscape <- function(df_name, Name){
@@ -111,6 +93,24 @@ get_data <- function(unique_strain, df){
   dev.off()
   plot_overlay(CA_2,EC_2,PA_2,SA_2, unique_strain)
 }
+
+#create interactive command line arguments later
+args <- commandArgs(trailingOnly = TRUE)
+data_table <- read.csv(args[1], stringsAsFactors=FALSE)
+
+#to get well names 
+synonyms <- data_table$Synonyms
+
+#get file name
+file_name <- unlist(strsplit(args[1], "[.]"))
+jpeg(paste0(file_name[1], "landscape.jpg"))
+
+#get strain name and well
+well_idx_vector <- as.vector(sapply(synonyms, get_strain_info, num=2))
+well_strain_vector <- as.vector(sapply(synonyms, get_strain_info, num=1))
+
+#Organize the data by ascending/descending order
+ind <- data.frame(Wells=paste0(rep(LETTERS[1:8], each=10), c("02","03","04","05","06","07","08","09","10","11", "11","10","09","08","07","06","05","04","03","02")), stringsAsFactors=FALSE)
 
 unique_strains <- unique(well_strain_vector)
 sapply(unique_strains, get_data, df=data_table)  

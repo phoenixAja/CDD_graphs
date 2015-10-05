@@ -75,10 +75,11 @@ plot_overlay <- function(CA,EC,PA,SA, unique_strain){
 
 #Parse data by each unique strain and plot landscape and overlay graphs
 get_strain_df <- function(unique_strain, prefix, wells){
-  strain_ID <- paste0(prefix, .Dose.Response.Data....negative.control....)
-  neg <- unique_strain$strain_ID
+  strain_ID <- paste0(prefix, ".Dose.Response.Data....negative.control....")
+  strain_volume <- paste0(prefix, ".Dose.Response.Data..Volume..nL.")
+  neg <- unique_strain[,strain_ID]
   inv_neg <- as.vector(sapply(neg, inv_neg))
-  new_df <- data.frame(Wells=wells, mass=unique_strain$Mass..mg., volume=unique_strain$stain_ID, neg_control=inv_neg, stringsAsFactors = FALSE)
+  new_df <- data.frame(Wells=wells, mass=unique_strain$Mass..mg., volume=unique_strain[,strain_volume], neg_control=inv_neg, stringsAsFactors = FALSE)
   data_500 <- which(new_df$volume == 500)
   DATA_parsed <- new_df[data_500,]
   complete_df <- merge(ind, DATA_parsed, by="Wells", sort=FALSE)
@@ -99,7 +100,7 @@ get_data <- function(unique_strain, df){
   #CA_data <- data.frame(Wells=wells, mass=unique_2$Mass..mg., volume=unique_2$CA.Dose.Response.Data..Volume..nL., neg_control=CA_inv_neg, stringsAsFactors = FALSE)
   #CA_data_500 <- which(CA_data$volume == 500)
  # CA_DATA_parsed <- CA_data[CA_data_500,]
-  CA_2 <- get_strain_df(unique_2, CA, wells)
+  CA_2 <- get_strain_df(unique_2, "CA", wells)
   
   #EC Data
   EC_neg <- unique_2$EC.Dose.Response.Data....negative.control....

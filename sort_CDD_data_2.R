@@ -34,11 +34,12 @@ plot_landscape <- function(df_name, Name){
 #Plot all four strains overlayed
 plot_overlay <- function(CA,EC,PA,SA, unique_strain){
     #function will overlay all lines crated through % inhibition
-    png(paste0(unique_strain, "_overlay.jpg"), units = "in", width=11, height=8.5, res=300)
+    png(paste0(unique_strain, "_overlay.png"), units = "in", width=11, height=8.5, res=300)
     par(mfrow=c(1,1), mar=c(2.0, 4.0,2.0,4.0), oma=c(0,0,3,1))
-    plot(CA$neg_control, ylab= "% inhibition", xlab= "", xaxt='n', main= "Strain Samples at 500nL", type = "l", col = "purple", ylim=c(0,100), cex=1.0, lwd=4)
+    plot(CA$neg_control, ylab= "% inhibition", xlab= "", xaxt='n', main= "Strain Samples at 500nL", 
+         type = "l", col = "purple", ylim=c(0,100), cex=1.0, lwd=4)
     par(new=TRUE)
-    lines(EC$neg_control, ylab= "% inhibition", xlab= "", xaxt='n',main= "EC Sample",                  
+    lines(EC$neg_control, ylab= "% Inhibition", xlab= "", xaxt='n',main= "EC Sample",                  
               type = "l", col = "green", ylim=c(0,100), lwd=4)
     par(new=TRUE)
     lines(PA$neg_control, ylab= "", xlab= "",xaxt='n', main= "PA Sample",                  
@@ -47,7 +48,7 @@ plot_overlay <- function(CA,EC,PA,SA, unique_strain){
     lines(SA$neg_control, ylab= "", xlab= "", xaxt='n',main= "SA Sample",                  
          type = "l", col = "orange", ylim=c(0,100), lwd=4)
     par(new=TRUE)
-    plot(PA$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F, lwd=4, ylim=c(0,0.5))
+    plot(PA$mass, type="l", col= "red", xlab= NA, ylab=NA, axes=F, lwd=4, ylim=c(0,0.8))
     axis(side=4, col.ticks="red", col.axis="red", las=0)
     axis(side=1, at=c(1:80), labels=ind$Wells, font=0.2, las=2, cex.axis=0.5)
     mtext("Weight by ESLD", las=0, side=4,line=3, col="red", cex=0.8)

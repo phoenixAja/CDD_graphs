@@ -56,7 +56,7 @@ plot_overlay <- function(CA,EC,PA,SA, unique_strain){
 }
 
 #Parse data by each unique strain and plot landscape and overlay graphs
-get_strain_df <- function(unique_strain, prefix, wells){
+get_strain_df <- function(unique_strain, prefix, wells, strain){
   strain_ID <- paste0(prefix, ".Dose.Response.Data....negative.control....")
   strain_volume <- paste0(prefix, ".Dose.Response.Data..Volume..nL.")
   neg <- unique_strain[,strain_ID]
@@ -65,6 +65,7 @@ get_strain_df <- function(unique_strain, prefix, wells){
   data_500 <- which(new_df$volume == 500)
   DATA_parsed <- new_df[data_500,]
   complete_df <- merge(ind, DATA_parsed, by="Wells", sort=FALSE)
+  write.csv(complete_df, file=paste(strain, prefix, ".csv", sep="_"))
   return(complete_df)
 }
 
@@ -75,13 +76,13 @@ get_data <- function(unique_strain, df){
   unique_syns <- unique_2$Synonyms
   wells <- as.vector(sapply(unique_syns, get_strain_info, num=2))
   #CA Data
-  CA_2 <- get_strain_df(unique_2, "CA", wells) 
+  CA_2 <- get_strain_df(unique_2, "CA", wells, unique_strain) 
   #EC Data
-  EC_2 <- get_strain_df(unique_2, "EC", wells)
+  EC_2 <- get_strain_df(unique_2, "EC", wells, unique_strain)
   #PA Data
-  PA_2 <- get_strain_df(unique_2, "PA", wells)
+  PA_2 <- get_strain_df(unique_2, "PA", wells, unique_strain)
   #SA Data
-  SA_2 <- get_strain_df(unique_2, "CA", wells)
+  SA_2 <- get_strain_df(unique_2, "CA", wells, unique_strain)
   
   png(file=paste0(unique_strain, ".png"), units = "in", width=11, height=8.5, res=300)
   par(mfrow=c(4,1), mar=c(2.0, 4.0,2.0,4.0), oma=c(1,1,3,1))

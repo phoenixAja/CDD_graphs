@@ -36,7 +36,8 @@ plot_overlay <- function(CA,EC,PA,SA, unique_strain){
     #function will overlay all lines crated through % inhibition
     png(paste0(unique_strain, "_overlay.png"), units = "in", width=11, height=8.5, res=300)
     par(mfrow=c(1,1), mar=c(2.0, 4.0,2.0,4.0), oma=c(0,0,3,1))
-    plot(CA$neg_control, ylab= "% inhibition", xlab= "", xaxt='n', main= "Strain Samples at 500nL", 
+    title <- paste0(unique_strain, " at 500nL")
+    plot(CA$neg_control, ylab= "% Inhibition", xlab= "", xaxt='n', main=title, 
          type = "l", col = "purple", ylim=c(0,100), cex=1.0, lwd=4)
     par(new=TRUE)
     lines(EC$neg_control, ylab= "% Inhibition", xlab= "", xaxt='n',main= "EC Sample",                  
@@ -83,7 +84,7 @@ get_data <- function(unique_strain, df){
   #PA Data
   PA_2 <- get_strain_df(unique_2, "PA", wells, unique_strain)
   #SA Data
-  SA_2 <- get_strain_df(unique_2, "CA", wells, unique_strain)
+  SA_2 <- get_strain_df(unique_2, "SA", wells, unique_strain)
   
   png(file=paste0(unique_strain, ".png"), units = "in", width=11, height=8.5, res=300)
   par(mfrow=c(4,1), mar=c(2.0, 4.0,2.0,4.0), oma=c(1,1,3,1))
